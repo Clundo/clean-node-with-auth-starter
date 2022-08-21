@@ -3,6 +3,7 @@ import express, {Application, ErrorRequestHandler} from "express";
 import bodyParser from "body-parser";
 
 export class ExpressApp {
+
     constructor() {
 
     }
@@ -34,7 +35,7 @@ export class ExpressApp {
         app.use(errorHandler)
 
         app.listen(process.env.port || 9000, () => {
-            console.log('connected')
+            console.log('App connected')
         })
     }
 }

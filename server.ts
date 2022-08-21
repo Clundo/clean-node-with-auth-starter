@@ -4,6 +4,6 @@ import {AuthService, DatabaseService, AppService} from "./src/config/dependencie
 dotenv.config();
 
 AppService.initApp()
-/*
 AuthService.initAuth()
+/*
 DatabaseService.initDatabase()*/
