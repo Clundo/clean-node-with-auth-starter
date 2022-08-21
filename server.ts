@@ -5,5 +5,4 @@ dotenv.config();
 
 AppService.initApp()
 AuthService.initAuth()
-/*
-DatabaseService.initDatabase()*/
+DatabaseService.initDatabase()
