@@ -13,6 +13,9 @@ declare global {
 }
 
 
+    export function initApp() {
+
+
         const app: Application = express();
 
         app.use(bodyParser.json())
@@ -40,5 +43,8 @@ declare global {
 
         app.use(errorHandler)
 
+        app.listen(process.env.port || 9000, () => {
+            console.log('App connected')
+        })
+    }
 
-  export default app
