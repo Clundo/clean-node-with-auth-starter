@@ -73,6 +73,7 @@ export class UserEntity extends BaseEntity implements IUserEntity {
 
     getPublicEntity() {
         return {
+            id: this._id,
             firstName: this._firstName,
             lastName: this._lastName,
             email: this._email

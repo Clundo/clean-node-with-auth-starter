@@ -1,4 +1,5 @@
 import {IBaseEntity} from "../../../../interfaces/IBaseEntity";
+import {IUserPublicEntity} from "./IUserPublicEntity";
 
 export interface IUserEntity extends IBaseEntity {
     firstName: string
@@ -7,5 +8,5 @@ export interface IUserEntity extends IBaseEntity {
     //id from auth service
     authId: string
 
-    getPublicEntity():  {firstName: string, lastName: string, email: string}
+    getPublicEntity: () => IUserPublicEntity
 }

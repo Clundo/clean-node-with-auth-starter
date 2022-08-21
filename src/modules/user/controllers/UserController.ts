@@ -20,12 +20,14 @@ interface UpdateProps {
     id: string
 }
 
+
+
 export class UserController implements IUserController {
     UserRepository: IUserRepository
     Id: IId
 
     constructor() {
-        this.UserRepository = DatabaseService.userRepository
+        this.UserRepository = DatabaseService && DatabaseService.userRepository
         this.Id = IdService
     }
 

@@ -8,6 +8,7 @@ import {IUserRepository} from "../../../../../../modules/user/domain/interfaces/
 export class UserRepository implements IUserRepository {
 
     constructor() {
+        console.log('user repo created')
     }
 
     async initCollection() {
@@ -82,7 +83,6 @@ export class UserRepository implements IUserRepository {
 
 
     async getOneById(userId: string) {
-
         try {
             const user = await UserModel.findById(userId)
             if (!user) return null

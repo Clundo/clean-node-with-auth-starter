@@ -1,9 +1,7 @@
-
 import express, {Application, ErrorRequestHandler} from "express";
 import bodyParser from "body-parser";
-import {UserController} from "../../../modules/user/controllers/UserController";
-import setAuthId from "./middleware/setAuthId";
 import {IUserEntity} from "../../../modules/user/domain/interfaces/IUserEntity";
+import userRoutes from "./routes/userRoutes";
 
 declare global {
     namespace Express {
@@ -13,13 +11,6 @@ declare global {
         }
     }
 }
-
-export class ExpressApp {
-
-    constructor() {
-
-    }
-    initApp() {
 
 
         const app: Application = express();
@@ -34,15 +25,9 @@ export class ExpressApp {
 
         //routes go here
 
-        app.use(setAuthId)
+        //app.use(setAuthId)
 
-        app.get('/',async (req, res) => {
-            const controller = new UserController()
-
-            const user = await controller.getOne('63029a6478dc2948daabb2c2')
-            console.log(user)
-            res.send(user)
-        })
+        app.use('/users', userRoutes)
 
         app.use('*', (req, res, next) => {
             next(new Error('not found'))
@@ -55,8 +40,5 @@ export class ExpressApp {
 
         app.use(errorHandler)
 
-        app.listen(process.env.port || 9000, () => {
-            console.log('App connected')
-        })
-    }
-}
+
+  export default app
