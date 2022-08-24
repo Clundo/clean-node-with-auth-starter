@@ -1,4 +1,5 @@
 import {BadRequestError} from "../lib/errors";
+import {IBaseEntity} from "../interfaces/IBaseEntity";
 
 interface Props {
     id: string
@@ -6,15 +7,15 @@ interface Props {
     modifiedAt?: number
 }
 
-export abstract class BaseEntity {
+export abstract class BaseEntity implements IBaseEntity{
     protected constructor({id, createdAt, modifiedAt}: Props) {
         console.log(id)
         if (!id) throw new BadRequestError('ID is missing')
         this._id = id
-        this._createdAt = createdAt ?? Date.now()
-        this._modifiedAt = modifiedAt ?? Date.now()
+        this._createdAt = createdAt ?? new Date()
+        this._modifiedAt = modifiedAt ?? new Date()
 
-        console.log(Date.now())
+        console.log(new Date())
         console.log(this._createdAt)
     }
 
@@ -37,6 +38,6 @@ export abstract class BaseEntity {
     }
 
     modifyNow() {
-        this._modifiedAt = Date.now()
+        this._modifiedAt = new Date()
     }
 }

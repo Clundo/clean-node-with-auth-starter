@@ -12,8 +12,8 @@ datasource db {
 
 model User {
     id          String      @id
-    createdAt   Int
-    modifiedAt  Int
+    createdAt   DateTime    @default(now()) @db.Timestamptz(3)
+    modifiedAt  DateTime    @default(now()) @db.Timestamptz(3)
     firstName   String
     lastName    String
     email       String      @unique
