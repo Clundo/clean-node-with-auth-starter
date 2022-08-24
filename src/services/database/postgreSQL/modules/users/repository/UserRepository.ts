@@ -1,25 +1,22 @@
 import {DatabaseService} from "../../../../../../config/dependencies";
 import {IUserEntity} from "../../../../../../modules/user/domain/interfaces/IUserEntity";
-import {UserModel} from "../schema/userSchema";
 import {DatabaseError} from "../../../../../../lib/errors";
 import {UserEntity} from "../../../../../../modules/user/domain/entities/userEntity";
 import {IUserRepository} from "../../../../../../modules/user/domain/interfaces/IUserRepository";
+import prisma from '../../../prisma'
 
 export class UserRepository implements IUserRepository {
-
+    prisma
     constructor() {
+    this.prisma = prisma
         console.log('user repo created')
-    }
-
-    async initCollection() {
-        await DatabaseService.initDatabase()
     }
 
     async create(userInstance: IUserEntity) {
         try {
             //Need to extract fields due to underscore in entity, or nothing is saved
             const {
-                id: _id,
+                id,
                 firstName,
                 lastName,
                 email,
@@ -27,17 +24,17 @@ export class UserRepository implements IUserRepository {
                 modifiedAt,
                 createdAt
             } = userInstance
-            const user = new UserModel({
-                _id,
-                firstName,
-                lastName,
-                email,
-                authId,
-                modifiedAt,
-                createdAt
+            const user = await this.prisma.user.create({
+                data: {
+                    id,
+                    firstName,
+                    lastName,
+                    email,
+                    authId,
+                    modifiedAt,
+                    createdAt
+                }
             })
-            await user.save()
-
             return new UserEntity(user)
 
         } catch (err) {
@@ -50,18 +47,20 @@ export class UserRepository implements IUserRepository {
 
             //Need to extract props, or this is not updated due to underscore
             const {
-                id: _id,
+                id,
                 firstName,
                 lastName,
                 email,
                 modifiedAt
             } = userInstance
-            const user = await UserModel.findByIdAndUpdate(_id, {
+            const user = await this.prisma.user.update({
+                where: {id},
+                data: {
                 firstName,
                 lastName,
                 email,
                 modifiedAt
-            }).populate('organization', '-users')
+            }})
 
             if(!user) throw new DatabaseError()
 
@@ -73,7 +72,9 @@ export class UserRepository implements IUserRepository {
 
     async delete(userId: string) {
         try {
-            return await UserModel.findByIdAndDelete(userId)
+            return await this.prisma.user.delete({
+            where: {id: userId}
+            })
 
         } catch (err) {
             throw err
@@ -84,8 +85,9 @@ export class UserRepository implements IUserRepository {
 
     async getOneById(userId: string) {
         try {
-            const user = await UserModel.findById(userId)
+            const user = await this.prisma.user.findUnique({where: {id: userId}})
             if (!user) return null
+            console.log(user)
             return new UserEntity(user)
 
         } catch (err) {
@@ -96,7 +98,7 @@ export class UserRepository implements IUserRepository {
     async getOneByEmail(email: string) {
 
         try {
-            const user = await UserModel.findOne({email})
+            const user = await this.prisma.user.findUnique({where: {email}})
             if (!user) return null
             return new UserEntity(user)
 

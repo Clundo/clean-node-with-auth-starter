@@ -8,8 +8,8 @@ interface Props {
     lastName: string
     email: string
     authId: string
-    createdOn?: number
-    modifiedOn?: number
+    createdAt?: number
+    modifiedAt?: number
 }
 
 
@@ -21,10 +21,10 @@ export class UserEntity extends BaseEntity implements IUserEntity {
                     lastName,
                     email,
                     authId,
-                    createdOn,
-                    modifiedOn
+                    createdAt,
+                    modifiedAt
                 }: Props) {
-        super({id, createdOn, modifiedOn})
+        super({id, createdAt, modifiedAt})
         if (!firstName) throw new BadRequestError('First Name is required')
         if (!lastName) throw new BadRequestError('Last Name is required')
         if (!email) throw new BadRequestError('Email is required')

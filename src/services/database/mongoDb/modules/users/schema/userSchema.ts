@@ -5,8 +5,8 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    createdOn: Number,
-    modifiedOn: Number,
+    createdAt: Number,
+    modifiedAt: Number,
     firstName: String,
     lastName: String,
     email: String,

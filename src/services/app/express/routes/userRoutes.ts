@@ -11,12 +11,12 @@ const userPresenter = new UserPresenter()
 
 
 userRouter.post('/', async (req, res) => {
-
+    console.log(req.body)
     const {authId} = req
 
     const {firstName, lastName, email} = req.body
 
-    const {id} = await userController.create({firstName, lastName, email, authId})
+    const {id} = await userController.create({firstName, lastName, email, authId: '123a'})
 
     const user = await userPresenter.getOne(id)
 

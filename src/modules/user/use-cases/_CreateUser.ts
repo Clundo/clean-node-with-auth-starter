@@ -19,12 +19,11 @@ interface ExecProps {
 export function _CreateUser ({Id, UserRepository}: Props) {
 
     async function Execute({firstName, lastName, email, authId}: ExecProps) {
-        const id = Id.makeId()
+        const id = await Id.makeId()
         if(!email) throw new BadRequestError('Email is required')
         const existingUser = await UserRepository.getOneByEmail(email)
         if(existingUser) throw new ServerError('User already exists')
         const newUser = new UserEntity({id, firstName, lastName, email, authId})
-
         return await UserRepository.create(newUser)
 
     }
@@ -32,4 +31,4 @@ export function _CreateUser ({Id, UserRepository}: Props) {
     return {
         Execute
     };
-};
+}

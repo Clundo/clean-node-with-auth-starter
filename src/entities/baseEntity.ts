@@ -2,17 +2,20 @@ import {BadRequestError} from "../lib/errors";
 
 interface Props {
     id: string
-    createdOn?: number
-    modifiedOn?: number
+    createdAt?: number
+    modifiedAt?: number
 }
 
 export abstract class BaseEntity {
-    protected constructor({id, createdOn, modifiedOn}: Props) {
-
+    protected constructor({id, createdAt, modifiedAt}: Props) {
+        console.log(id)
         if (!id) throw new BadRequestError('ID is missing')
         this._id = id
-        this._createdOn = createdOn ?? Date.now()
-        this._modifiedOn = modifiedOn ?? Date.now()
+        this._createdAt = createdAt ?? Date.now()
+        this._modifiedAt = modifiedAt ?? Date.now()
+
+        console.log(Date.now())
+        console.log(this._createdAt)
     }
 
     protected _id: string
@@ -21,19 +24,19 @@ export abstract class BaseEntity {
         return this._id
     }
 
-    private _createdOn: number
+    private _createdAt: number
 
-    get createdOn() {
-        return this._createdOn
+    get createdAt() {
+        return this._createdAt
     }
 
-    protected _modifiedOn: number
+    protected _modifiedAt: number
 
-    get modifiedOn() {
-        return this._modifiedOn
+    get modifiedAt() {
+        return this._modifiedAt
     }
 
     modifyNow() {
-        this._modifiedOn = Date.now()
+        this._modifiedAt = Date.now()
     }
 }

@@ -1,5 +1,5 @@
 export interface IBaseEntity {
     readonly id: string
-    readonly createdOn: number
-    modifiedOn: number
+    readonly createdAt: number
+    modifiedAt: number
 }
