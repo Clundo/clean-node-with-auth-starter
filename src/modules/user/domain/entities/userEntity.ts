@@ -8,8 +8,8 @@ interface Props {
     lastName: string
     email: string
     authId: string
-    createdAt?: number
-    modifiedAt?: number
+    createdAt?: Date
+    modifiedAt?: Date
 }
 
 

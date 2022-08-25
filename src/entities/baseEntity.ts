@@ -3,8 +3,8 @@ import {IBaseEntity} from "../interfaces/IBaseEntity";
 
 interface Props {
     id: string
-    createdAt?: number
-    modifiedAt?: number
+    createdAt?: Date
+    modifiedAt?: Date
 }
 
 export abstract class BaseEntity implements IBaseEntity{
