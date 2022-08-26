@@ -10,6 +10,7 @@ export function _GetAccountById({AccountRepository}: Props) {
     async function Execute({id}: { id: string }) {
         if (!id) throw new BadRequestError('Id is required')
         return await AccountRepository.getOneById(id)
+       
     }
 
     return {

@@ -9,7 +9,6 @@ import {EPermissionSections} from "../interfaces/EPermissionSections";
 import {BadRequestError, NotFoundError, ServerError, UnauthorizedError} from "../lib/errors";
 import {UpdateAccountProps} from "../modules/account/use-cases/_UpdateAccount";
 import {AuthService} from "../config/dependencies";
-import userRouter from "../services/app/express/routes/userRoutes";
 
 interface IUpdateAccountProps extends UpdateAccountProps {
     userRole: IRoleEntity
@@ -111,7 +110,7 @@ export class Interactor implements IInteractor {
         }
     }
 
-    async getUser({id, userRole} : { id: string, userRole: IRoleEntity }) {
+    async getUser({id, userRole}: { id: string, userRole: IRoleEntity }) {
         try {
 
             return await this.userPresenter.getOne(id)
@@ -144,7 +143,7 @@ export class Interactor implements IInteractor {
             const userPermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.USERS)
             if (!userPermissions || !userPermissions.canWrite) throw new UnauthorizedError()
             const existing = await this.userController.getOneByEmail(email)
-            if(existing) throw new ServerError('Email already in use')
+            if (existing) throw new ServerError('Email already in use')
             const authId = await AuthService.createUser({email, password})
             const user = await this.userController.create({
                 firstName,
@@ -174,11 +173,11 @@ export class Interactor implements IInteractor {
             if (!userPermissions || !userPermissions.canWrite) throw new UnauthorizedError()
 
             const user = await this.userController.getOne(id)
-            if(!user) throw new NotFoundError()
+            if (!user) throw new NotFoundError()
 
-            if(user.accountId !== userRole.accountId) throw new UnauthorizedError()
+            if (user.accountId !== userRole.accountId) throw new UnauthorizedError()
 
-            if(roleId) {
+            if (roleId) {
                 const rolePermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.ROLE)
                 if (!rolePermissions || !rolePermissions.canWrite) throw new UnauthorizedError()
             }
@@ -192,10 +191,10 @@ export class Interactor implements IInteractor {
     async deleteUser({id, userRole}: { id: string, userRole: IRoleEntity }) {
         try {
             const userPermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.USERS)
-            if (!userPermissions || userPermissions.canDelete) throw new UnauthorizedError()
+            if (!userPermissions || !userPermissions.canDelete) throw new UnauthorizedError()
             const user = await this.userController.getOne(id)
-            if(!user) throw new NotFoundError()
-            if(user.accountId !== userRole.accountId) throw new UnauthorizedError()
+            if (!user) throw new NotFoundError()
+            if (user.accountId !== userRole.accountId) throw new UnauthorizedError()
             return await this.userController.delete(id)
         } catch (e) {
             console.error(e)
@@ -206,7 +205,7 @@ export class Interactor implements IInteractor {
     async getAccount({userRole}: { userRole: IRoleEntity }) {
         try {
             const accountPermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.ACCOUNT)
-            if (!accountPermissions || accountPermissions.canRead) throw new UnauthorizedError()
+            if (!accountPermissions || !accountPermissions.canRead) throw new UnauthorizedError()
             return await this.accountPresenter.getOne(userRole.accountId)
         } catch (e) {
             console.error(e)
@@ -219,7 +218,7 @@ export class Interactor implements IInteractor {
         try {
             const accountPermissions = userRole.permissions.find((permission: IPermission) => permission.section === EPermissionSections.ACCOUNT)
             if (!accountPermissions || !accountPermissions.canWrite || userRole.accountId !== props.id) throw new UnauthorizedError()
-            if(props.id !== userRole.accountId) throw new UnauthorizedError()
+            if (props.id !== userRole.accountId) throw new UnauthorizedError()
             await this.accountController.update(props)
             return await this.accountPresenter.getOne(props.id)
         } catch (e) {
@@ -263,12 +262,23 @@ export class Interactor implements IInteractor {
         }
     }
 
-    async updateRole({userRole, roleToUpdate}: { userRole: IRoleEntity, roleToUpdate: IRoleEntity }) {
+    async updateRole({
+                         userRole,
+                         roleToUpdate
+                     }: { userRole: IRoleEntity, roleToUpdate: { id: string, accountId: string, name?: string, permissions?: IPermission[] } }) {
         try {
             const rolePermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.ROLE)
             if (!rolePermissions || !rolePermissions.canWrite || userRole.accountId !== roleToUpdate.accountId) throw new UnauthorizedError()
 
-            return await this.roleController.update(roleToUpdate)
+            const role = await this.roleController.getOne(roleToUpdate.id)
+            if (!role) throw new NotFoundError()
+            if (role.accountId !== userRole.accountId) throw new UnauthorizedError()
+
+            await this.roleController.update(roleToUpdate)
+            if (roleToUpdate.permissions) {
+                roleToUpdate.permissions.forEach(async permission => await this.roleController.updatePermission({roleId: roleToUpdate.id, ...permission}))
+            }
+            return await this.roleController.getOne(roleToUpdate.id)
         } catch (e) {
             throw e
         }
@@ -281,7 +291,7 @@ export class Interactor implements IInteractor {
                            }: { userRole: IRoleEntity, roleId: string, permission: IPermission }) {
         try {
             const role = await this.roleController.getOne(roleId)
-            if(!role) throw new NotFoundError()
+            if (!role) throw new NotFoundError()
             const rolePermissions = userRole.permissions.find(permission => permission.section === EPermissionSections.ROLE)
             if (!rolePermissions || !rolePermissions.canWrite || userRole.accountId !== role.accountId) throw new UnauthorizedError()
             return await this.roleController.updatePermission({roleId, ...permission})

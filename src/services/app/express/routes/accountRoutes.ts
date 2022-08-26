@@ -10,7 +10,8 @@ accountRouter.get('/', async (req, res, next) => {
     try {
         const {userRole} = req
         if (!userRole) throw new UnauthorizedError()
-        return await interactor.getAccount({userRole})
+        const account = await interactor.getAccount({userRole})
+        res.send(account)
     } catch (e) {
         next(e)
     }
@@ -33,7 +34,7 @@ accountRouter.put('/', async (req, res, next) => {
             phone,
             email,
         } = req.body
-        await interactor.updateAccount({userRole, name,
+        const account = await interactor.updateAccount({userRole, name,
             id,
             vatNumber,
             addressLine1,
@@ -45,8 +46,11 @@ accountRouter.put('/', async (req, res, next) => {
             phone,
             email,})
 
-        return await interactor.getAccount({userRole})
+        res.send(account)
+
     } catch (e) {
         next(e)
     }
 })
+
+export default accountRouter

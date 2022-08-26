@@ -18,8 +18,8 @@ export class AccountPresenter implements IAccountPresenter {
         const account = await _GetAccountById(
             {AccountRepository: this.AccountRepository}
         ).Execute({id})
-
-        return account?.getPublicEntity() ?? null
+        if(!account) return null
+        return account.getPublicEntity()
     }
 
 }

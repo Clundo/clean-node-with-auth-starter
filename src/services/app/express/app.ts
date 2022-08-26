@@ -4,6 +4,7 @@ import userRoutes from "./routes/userRoutes";
 import {IRoleEntity} from "../../../modules/role/domain/interfaces/IRoleEntity";
 import setUserRole from "./middleware/setUserRole";
 import authRoutes from "./routes/authRoutes";
+import accountRoutes from "./routes/accountRoutes";
 
 declare global {
     namespace Express {
@@ -44,6 +45,7 @@ export function initApp() {
     //routes go here
     app.use('/auth', authRoutes)
     app.use('/users', userRoutes)
+    app.use('/accounts', accountRoutes)
 
     app.use('*', (req, res, next) => {
         next(new Error('not found'))

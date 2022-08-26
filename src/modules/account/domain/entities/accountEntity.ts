@@ -1,6 +1,5 @@
 import {IUserEntity} from "../../../user/domain/interfaces/IUserEntity";
 import {IAccountEntity} from "../interfaces/IAccountEntity";
-import {IRole} from "../../../../interfaces/IRole";
 import {BaseEntity} from "../../../../entities/baseEntity";
 import {BadRequestError} from "../../../../lib/errors";
 
@@ -9,7 +8,7 @@ interface Props {
     createdAt?: Date
     modifiedAt?: Date
     name: string
-    vatNumber: string
+    vatNumber?: string
     addressLine1?: string
     addressLine2?: string
     postCode?: string
@@ -51,7 +50,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
         super({id, createdAt, modifiedAt})
         if(!name) throw new BadRequestError('Name is required')
         this._name = name
-        this._vatNumber = vatNumber
+        this._vatNumber = vatNumber ?? ''
         this._addressLine1 = addressLine1 ?? ''
         this._addressLine2 = addressLine2 ?? ''
         this._postCode = postCode ?? ''

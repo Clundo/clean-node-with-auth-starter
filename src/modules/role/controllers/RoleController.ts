@@ -17,8 +17,9 @@ interface CreateProps {
 }
 
 interface UpdateProps {
-    name: string,
-    id: string
+    name?: string,
+    id: string,
+    permissions?: IPermission[]
 }
 
 interface UpdatePermissionProps extends IPermission {
