@@ -25,13 +25,13 @@ export abstract class BaseEntity implements IBaseEntity{
         return this._id
     }
 
-    private _createdAt: number
+    private _createdAt: Date
 
     get createdAt() {
         return this._createdAt
     }
 
-    protected _modifiedAt: number
+    protected _modifiedAt: Date
 
     get modifiedAt() {
         return this._modifiedAt

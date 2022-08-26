@@ -3,22 +3,22 @@ import {UserController} from "../../../../modules/user/controllers/UserControlle
 import {UserPresenter} from "../../../../modules/user/presenters/UserPresenter";
 import {NotFoundError, ServerError, UnauthorizedError} from "../../../../lib/errors";
 import {DatabaseService} from "../../../../config/dependencies";
+import {Interactor} from "../../../../interactors/Interactor";
 
 const userRouter = Router()
 
-const userController = new UserController()
-const userPresenter = new UserPresenter()
+const interactor = new Interactor()
 
 
 userRouter.post('/', async (req, res) => {
     console.log(req.body)
-    const {authId} = req
+    //const {authId} = req
 
     const {firstName, lastName, email} = req.body
 
-    const {id} = await userController.create({firstName, lastName, email, authId: '123a'})
+    const authId = (Math.random() * 1000000).toString()
 
-    const user = await userPresenter.getOne(id)
+    const user = await interactor.signUp({firstName, lastName, email, authId})
 
     res.status(201).send(user)
 
@@ -26,34 +26,28 @@ userRouter.post('/', async (req, res) => {
 
 userRouter.put('/:id', async (req, res) => {
 
+    const userRole = req.userRole
+
+    if(!userRole) throw new UnauthorizedError()
+
     const {id} = req.params
 
     const {firstName, lastName} = req.body
 
-    const u = await userController.getOne(id)
-    if(!u) throw new NotFoundError('Could not find user')
-    if(u.authId !== req.authId) throw new UnauthorizedError()
-
-    await userController.update({id, firstName, lastName})
-
-    const user = await userPresenter.getOne(id)
+    const user = await interactor.updateUser({userRole, firstName, lastName, id})
 
     res.send(user)
 })
 
 userRouter.delete('/:id', async (req, res) => {
 
+    const userRole = req.userRole
+
+    if(!userRole) throw new UnauthorizedError()
+
     const {id} = req.params
 
-    const u = await userController.getOne(id)
-    if(!u) throw new NotFoundError('Could not find user')
-    if(u.authId !== req.authId) throw new UnauthorizedError()
-
-    await userController.delete(id)
-
-    const user = await userPresenter.getOne(id)
-
-    if(user) throw new ServerError('Could not delete user')
+   await interactor.deleteUser({id, userRole})
 
     res.status(204).end()
 
@@ -61,7 +55,7 @@ userRouter.delete('/:id', async (req, res) => {
 
 userRouter.get('/:id', async (req, res) => {
     const {id} = req.params
-    const user = await userPresenter.getOne(id)
+    const user = await interactor.getUser(id)
 
     res.send(user)
 })

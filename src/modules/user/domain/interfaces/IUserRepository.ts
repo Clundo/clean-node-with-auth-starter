@@ -11,4 +11,7 @@ export interface IUserRepository {
 
     getOneByEmail: (email: string) => Promise<IUserEntity | null>
 
+    getOneByAuthId: (authId: string) => Promise<IUserEntity | null>
+
+    getAccountUsers: (accountId: string) => Promise<IUserEntity[]>
 }

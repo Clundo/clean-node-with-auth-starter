@@ -7,6 +7,8 @@ export interface IUserEntity extends IBaseEntity {
     email: string
     //id from auth service
     authId: string
+    accountId: string
+    roleId: string
 
     getPublicEntity: () => IUserPublicEntity
 }

@@ -10,6 +10,8 @@ interface Props {
     authId: string
     createdAt?: Date
     modifiedAt?: Date
+    accountId: string
+    roleId: string
 }
 
 
@@ -22,17 +24,23 @@ export class UserEntity extends BaseEntity implements IUserEntity {
                     email,
                     authId,
                     createdAt,
-                    modifiedAt
+                    modifiedAt,
+                    accountId,
+                    roleId
                 }: Props) {
         super({id, createdAt, modifiedAt})
         if (!firstName) throw new BadRequestError('First Name is required')
         if (!lastName) throw new BadRequestError('Last Name is required')
         if (!email) throw new BadRequestError('Email is required')
         if (!authId) throw new BadRequestError('Auth ID is required')
+        if (!accountId) throw new BadRequestError('Account ID is required')
+        if (!roleId) throw new BadRequestError('Role ID is required')
         this._firstName = firstName
         this._lastName = lastName
         this._email = email
         this._authId = authId
+        this._accountId = accountId
+        this._roleId = roleId
     }
 
     private _firstName: string
@@ -70,6 +78,17 @@ export class UserEntity extends BaseEntity implements IUserEntity {
     get authId() {
         return this._authId
     }
+
+    _accountId: string
+    get accountId () {
+        return this._accountId
+    }
+
+    _roleId: string
+    get roleId () {
+        return this._roleId
+    }
+
 
     getPublicEntity() {
         return {

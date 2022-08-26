@@ -2,12 +2,13 @@ import express, {Application, ErrorRequestHandler} from "express";
 import bodyParser from "body-parser";
 import {IUserEntity} from "../../../modules/user/domain/interfaces/IUserEntity";
 import userRoutes from "./routes/userRoutes";
+import {IRoleEntity} from "../../../modules/role/domain/interfaces/IRoleEntity";
 
 declare global {
     namespace Express {
         interface Request {
             authId: string,
-            currentUser: IUserEntity | null
+            userRole: IRoleEntity | null
         }
     }
 }
