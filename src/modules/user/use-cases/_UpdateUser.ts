@@ -1,4 +1,4 @@
-import {BadRequestError, NotFoundError, ServerError} from "../../../lib/errors";
+import {BadRequestError, NotFoundError} from "../../../lib/errors";
 import {IUserRepository} from "../domain/interfaces/IUserRepository";
 
 interface Props {
@@ -9,11 +9,12 @@ interface UpdateUserProps {
     id: string
     firstName?: string
     lastName?: string
+    roleId?: string
 }
 
-export function _UpdateUser ({UserRepository}: Props)  {
+export function _UpdateUser({UserRepository}: Props) {
 
-    async function Execute({id, firstName, lastName}: UpdateUserProps) {
+    async function Execute({id, firstName, lastName, roleId}: UpdateUserProps) {
 
         if (!id) throw new BadRequestError('ID is required')
         const user = await UserRepository.getOneById(id)
@@ -21,6 +22,7 @@ export function _UpdateUser ({UserRepository}: Props)  {
 
         if (firstName) user.firstName = firstName
         if (lastName) user.lastName = lastName
+        if (roleId) user.roleId = roleId
 
         return await UserRepository.update(user)
     }

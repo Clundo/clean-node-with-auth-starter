@@ -9,14 +9,11 @@ interface Props {
 
 export abstract class BaseEntity implements IBaseEntity{
     protected constructor({id, createdAt, modifiedAt}: Props) {
-        console.log(id)
         if (!id) throw new BadRequestError('ID is missing')
         this._id = id
         this._createdAt = createdAt ?? new Date()
         this._modifiedAt = modifiedAt ?? new Date()
 
-        console.log(new Date())
-        console.log(this._createdAt)
     }
 
     protected _id: string

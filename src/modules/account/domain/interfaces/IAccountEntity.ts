@@ -3,6 +3,7 @@ import {IAccountPublicEntity} from "./IAccountPublicEntity";
 
 export interface IAccountEntity extends IBaseEntity {
     name: string
+    vatNumber: string
     addressLine1: string
     addressLine2: string
     postCode: string

@@ -7,6 +7,7 @@ import {_UpdateUser} from "../use-cases/_UpdateUser";
 import {_DeleteUser} from "../use-cases/_DeleteUser";
 import {_GetUserById} from "../use-cases/_GetUserById";
 import {_GetUserByAuthId} from "../use-cases/_GetUserByAuthId";
+import {_GetUserByEmail} from "../use-cases/_GetUserByEmail";
 
 interface CreateProps {
     firstName: string,
@@ -18,8 +19,9 @@ interface CreateProps {
 }
 
 interface UpdateProps {
-    firstName: string,
-    lastName: string,
+    firstName?: string,
+    lastName?: string,
+    roleId?: string,
     id: string
 }
 
@@ -42,10 +44,10 @@ export class UserController implements IUserController {
 
     }
 
-    async update({firstName, lastName, id}: UpdateProps) {
+    async update({firstName, lastName, roleId, id}: UpdateProps) {
         return await _UpdateUser(
             {UserRepository: this.UserRepository}
-        ).Execute({firstName, lastName, id})
+        ).Execute({firstName, lastName, roleId, id})
 
 
     }
@@ -60,6 +62,12 @@ export class UserController implements IUserController {
         return await _GetUserById(
             {UserRepository: this.UserRepository}
         ).Execute({id})
+    }
+
+    async getOneByEmail( email: string) {
+        return await _GetUserByEmail(
+            {UserRepository: this.UserRepository}
+        ).Execute({email})
     }
 
     async getOneByAuthId( authId: string) {

@@ -9,6 +9,7 @@ interface Props {
     createdAt?: Date
     modifiedAt?: Date
     name: string
+    vatNumber: string
     addressLine1?: string
     addressLine2?: string
     postCode?: string
@@ -21,6 +22,7 @@ interface Props {
 
 export class AccountEntity extends BaseEntity implements IAccountEntity {
     _name: string
+    _vatNumber: string
     _addressLine1: string
     _addressLine2: string
     _postCode: string
@@ -36,6 +38,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
                     createdAt,
                     modifiedAt,
                     name,
+        vatNumber,
                     addressLine1,
                     addressLine2,
                     phone,
@@ -48,6 +51,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
         super({id, createdAt, modifiedAt})
         if(!name) throw new BadRequestError('Name is required')
         this._name = name
+        this._vatNumber = vatNumber
         this._addressLine1 = addressLine1 ?? ''
         this._addressLine2 = addressLine2 ?? ''
         this._postCode = postCode ?? ''
@@ -64,6 +68,16 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set name(newVal: string) {
         this._name = newVal
+        this.modifyNow()
+    }
+
+    get vatNumber() {
+        return this._vatNumber
+    }
+
+    set vatNumber(newVal: string) {
+        this._vatNumber = newVal
+        this.modifyNow()
     }
 
     get addressLine1() {
@@ -72,6 +86,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set addressLine1(newVal: string) {
         this._addressLine1 = newVal
+        this.modifyNow()
     }
     get addressLine2() {
         return this._addressLine2
@@ -79,6 +94,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set addressLine2(newVal: string) {
         this._addressLine2 = newVal
+        this.modifyNow()
     }
     get postCode() {
         return this._postCode
@@ -86,6 +102,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set postCode(newVal: string) {
         this._postCode = newVal
+        this.modifyNow()
     }
     get city() {
         return this._city
@@ -93,6 +110,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set city(newVal: string) {
         this._city = newVal
+        this.modifyNow()
     }
     get state() {
         return this._state
@@ -100,6 +118,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set state(newVal: string) {
         this._state = newVal
+        this.modifyNow()
     }
     get country() {
         return this._country
@@ -107,6 +126,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set country(newVal: string) {
         this._country = newVal
+        this.modifyNow()
     }
 
     get phone() {
@@ -115,6 +135,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set phone(newVal: string) {
         this._phone = newVal
+        this.modifyNow()
     }
 
     get email() {
@@ -123,6 +144,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
     set email(newVal: string) {
         this._email = newVal
+        this.modifyNow()
     }
 
     getPublicEntity() {

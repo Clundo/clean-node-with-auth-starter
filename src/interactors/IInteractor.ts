@@ -10,13 +10,13 @@ interface IUpdateAccountProps extends UpdateAccountProps {
 
 export interface IInteractor {
 
-    signUp(props: { firstName: string, lastName: string, email: string }): Promise<IUserPublicEntity>
+    signUp(props: { firstName: string, lastName: string, email: string }): Promise<IUserPublicEntity | null>
 
-    getUser(id: string): Promise<IUserPublicEntity | null>
+    getUser(props: {id: string, userRole: IRoleEntity}): Promise<IUserPublicEntity | null>
 
     getUsers(props: {userRole: IRoleEntity}): Promise<IUserPublicEntity[]>
 
-    //createUser(props: { userRole: IRoleEntity, firstName: string, lastName: string, email: string }): Promise<IUserPublicEntity | null>
+    createUser(props: { userRole: IRoleEntity, firstName: string, lastName: string, email: string, password: string, roleId: string }): Promise<IUserPublicEntity | null>
 
     updateUser(props: { userRole: IRoleEntity, firstName: string, lastName: string, id: string }): Promise<IUserPublicEntity | null>
 
